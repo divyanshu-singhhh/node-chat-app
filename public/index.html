@@ -12,10 +12,13 @@
                     <label>Display Name</label>
                     <input type="text" name="username" placeholder="Display Name" required>
                     <label>Room</label>
-                    <input type="text" name="room" placeholder="Room" required>
+                    <input type="text" list="room" name="room" placeholder="Room" required autocomplete="off">
+                    <datalist id = "room">
+                    </datalist>
                     <button>Join</button>
                 </from>
             </div>
         </div>
+        <script src="./js/index.js"></script>
     </body>
 </html>

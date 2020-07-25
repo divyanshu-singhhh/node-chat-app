@@ -3,7 +3,9 @@ const express = require('express')
 const socketio = require('socket.io')
 const Filter = require('bad-words')
 const {generateMessage, generateLocationMessage} = require('./utils/messages')
-const {addUser,removeUser,getUser,getUsersInRoom} = require('./utils/users')
+const {addUser, removeUser, getUser, getUsersInRoom} = require('./utils/users')
+const {addRoom, removeRoom, getAllRooms} = require('./utils/room')
+const { get } = require('https')
 
 const app = express()
 const server = http.createServer(app)
@@ -35,6 +37,7 @@ io.on('connection' , (socket) => {
         }
 
         socket.join(user.room)
+        addRoom(user.room)
 
         socket.emit('message', generateMessage('Admin','Welcome'))
         socket.broadcast.to(user.room).emit('message', generateMessage('Admin',`${user.username} has joined`))
@@ -77,7 +80,16 @@ io.on('connection' , (socket) => {
                 users: getUsersInRoom(user.room)
             })
         }
+
+        if(getUsersInRoom(user.room).length === 0){
+            removeRoom(user.room)
+        }
     })
+})
+
+//get all rooms api
+app.get('/getrooms', (req,res) => {
+    res.send(getAllRooms())
 })
 
 
